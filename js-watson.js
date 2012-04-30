@@ -11,6 +11,9 @@
   
   // Try to initialize with the default google analytics async queue
   var _gaq = window._gaq;
+
+  // Based on http://bit.ly/ILq9ak
+  var _pathExtractRegEx = /^[a-z]+:\/\/\/?[^\/]+(\/[^?]*)/i; 
   
   // default path under which errors page-views will be reported
   var _pathPrefix = "/javascript_error";
@@ -30,8 +33,7 @@
   _i.trackUnhandledError = function(message, url, linenumber) {
     try {
       if(_gaq && _gaq.push && typeof(_gaq.push) == "function") {
-        var pathExtractRegEx = /^[a-z]+:\/\/\/?[^\/]+(\/[^?]*)/i; // http://bit.ly/ILq9ak
-        var url = _pathPrefix + (pathExtractRegEx.exec(url))[1] + "?line=" + linenumber + "&message=" + encodeURIComponent(message);
+        var url = _pathPrefix + (_pathExtractRegEx.exec(url))[1] + "?line=" + linenumber + "&message=" + encodeURIComponent(message);
         _gaq.push(['_trackPageview',url]);
       }
     } catch(e) {};
